@@ -11,6 +11,7 @@ import view.gui.PaintCanvas;
 import view.interfaces.IGuiWindow;
 import view.interfaces.PaintCanvasBase;
 import view.interfaces.IUiModule;
+import mouse.*;
 
 import java.awt.*;
 import java.util.Collection;
@@ -25,14 +26,11 @@ public class Main {
         IJPaintController controller = new JPaintController(uiModule, appState);
         controller.setup();
 
-        // For example purposes only; remove all lines below from your final project.
+        IMouseListener mouse = new IMouseListener(paintCanvas);
+        paintCanvas.addMouseListener(mouse);
 
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
+        /*
         // Filled in rectangle
         Graphics2D graphics2d = paintCanvas.getGraphics2D();
         graphics2d.setColor(Color.GREEN);
@@ -48,5 +46,6 @@ public class Main {
         graphics2d.setStroke(stroke);
         graphics2d.setColor(Color.BLACK);
         graphics2d.drawRect(7, 8, 210, 410);
+        */
     }
 }

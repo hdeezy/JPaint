@@ -29,7 +29,7 @@ public class GuiWindow extends JFrame implements IGuiWindow {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         JPanel window = createWindow();
         window.add(canvas, BorderLayout.CENTER);
-		validate();
+        validate();
     }
 
     @Override
