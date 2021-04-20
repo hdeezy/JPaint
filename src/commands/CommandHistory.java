@@ -3,8 +3,12 @@ package commands;
 import java.util.Stack;
 
 class CommandHistory {
-	public static final Stack<IUndoable> undoStack = new Stack<IUndoable>();
+	private static final Stack<IUndoable> undoStack = new Stack<IUndoable>();
 	private static final Stack<IUndoable> redoStack = new Stack<IUndoable>();
+
+	public static Stack<IUndoable> getUndoStack(){
+		return undoStack;
+	}
 
 	public static void add(IUndoable cmd) {
 		undoStack.push(cmd);
