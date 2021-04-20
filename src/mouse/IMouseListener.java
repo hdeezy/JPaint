@@ -3,6 +3,8 @@ package mouse;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.awt.Point;
+
+import commands.*;
 import controller.IJPaintController;
 import controller.JPaintController;
 import model.ShapeColor;
@@ -17,6 +19,7 @@ import view.interfaces.IUiModule;
 import mouse.*;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.EnumMap;
 public class IMouseListener implements MouseListener {
@@ -28,6 +31,14 @@ public class IMouseListener implements MouseListener {
     }
 
     private Point start, end = new Point();
+
+    public Point getStart(){
+        return start;
+    }
+
+    public Point getEnd(){
+        return end;
+    }
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -41,14 +52,19 @@ public class IMouseListener implements MouseListener {
     @Override
     public void mouseReleased(MouseEvent e) {
         end = e.getPoint();
+        /*
         Graphics2D graphics2d = paintCanvas.getGraphics2D();
         graphics2d.setColor(Color.GREEN);
         graphics2d.fillRect(start.x, start.y, end.x-start.x, end.y-start.y);
+         */
+        ICommand command = new DrawCommand(paintCanvas, this);
+        try{command.run();} catch (IOException x) { }
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
     }
+
     @Override
     public void mouseExited(MouseEvent e) {
     }

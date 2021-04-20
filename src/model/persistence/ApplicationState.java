@@ -1,5 +1,6 @@
 package model.persistence;
 
+import commands.*;
 import model.ShapeColor;
 import model.ShapeShadingType;
 import model.ShapeType;
@@ -8,6 +9,8 @@ import model.dialogs.DialogProvider;
 import model.interfaces.IApplicationState;
 import model.interfaces.IDialogProvider;
 import view.interfaces.IUiModule;
+
+import java.io.IOException;
 
 public class ApplicationState implements IApplicationState {
     private final IUiModule uiModule;
@@ -23,6 +26,18 @@ public class ApplicationState implements IApplicationState {
         this.uiModule = uiModule;
         this.dialogProvider = new DialogProvider(this);
         setDefaults();
+    }
+
+    @Override
+    public void UNDO(){
+        ICommand command = new UndoCommand();
+        try{command.run();} catch (IOException x) {System.out.println("IOException with undo.");}
+    }
+
+    @Override
+    public void REDO(){
+        ICommand command = new RedoCommand();
+        try{command.run();} catch (IOException x) {System.out.println("IOException with redo.");}
     }
 
     @Override
