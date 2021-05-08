@@ -20,6 +20,7 @@ public class Shape {
         this.shade = shade;
         this.color = color;
         this.color2 = color2;
+        System.out.println("Shape at: x1:"+topLeft.x+", y1:"+topLeft.y+", x2:"+bottomRight.x+", y2:"+bottomRight.y);
     }
 
     public Point getTopLeft(){return topLeft;}
@@ -56,6 +57,7 @@ public class Shape {
     }
 
     public void draw(PaintCanvasBase paintCanvas){
+
         Graphics2D graphics2d = paintCanvas.getGraphics2D();
 
         EnumMap<ShapeColor, Color> colorMap = new EnumMap<ShapeColor, Color>(ShapeColor.class);
