@@ -1,7 +1,5 @@
 package model.interfaces;
 
-import commands.DrawCommand;
-import commands.ICommand;
 import model.ShapeColor;
 import model.ShapeShadingType;
 import model.ShapeType;

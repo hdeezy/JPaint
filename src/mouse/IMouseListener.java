@@ -4,30 +4,24 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.awt.Point;
 
-import commands.*;
-import controller.IJPaintController;
-import controller.JPaintController;
-import model.ShapeColor;
+import model.MouseMode;
 import model.ShapeType;
+import model.interfaces.*;
 import model.persistence.ApplicationState;
-import view.gui.Gui;
-import view.gui.GuiWindow;
-import view.gui.PaintCanvas;
-import view.interfaces.IGuiWindow;
 import view.interfaces.PaintCanvasBase;
-import view.interfaces.IUiModule;
-import mouse.*;
 
-import java.awt.*;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.EnumMap;
-public class IMouseListener implements MouseListener {
+
+public class IMouseListener implements MouseListener, IStateObserver {
 
     PaintCanvasBase paintCanvas;
+    ApplicationState appState;
+    AppStateHandler stateHandler;
 
-    public IMouseListener(PaintCanvasBase paintCanvas){
+    public IMouseListener(ApplicationState appState, AppStateHandler stateHandler){
         this.paintCanvas = paintCanvas;
+        this.appState = appState;
+        this.stateHandler = stateHandler;
     }
 
     private Point start, end = new Point();
@@ -40,8 +34,15 @@ public class IMouseListener implements MouseListener {
         return end;
     }
 
+
     @Override
     public void mouseClicked(MouseEvent e) {
+        Point click = e.getPoint();
+        ICommand cmd;
+        if (appState.getActiveMouseMode().equals(MouseMode.SELECT)){
+            cmd = new SelectClickCommand(click, appState, stateHandler);
+            try{cmd.run();} catch (IOException x) { }
+        }
     }
 
     @Override
@@ -57,8 +58,30 @@ public class IMouseListener implements MouseListener {
         graphics2d.setColor(Color.GREEN);
         graphics2d.fillRect(start.x, start.y, end.x-start.x, end.y-start.y);
          */
-        ICommand command = new DrawCommand(paintCanvas, this);
-        try{command.run();} catch (IOException x) { }
+        ICommand cmd;
+        if (appState.getActiveMouseMode().equals(MouseMode.DRAW)){
+            if (appState.getActiveShapeType().equals(ShapeType.RECTANGLE)){
+                cmd = new ShapeCommand(start, end, appState, stateHandler);
+                try{cmd.run();} catch (IOException x) { }
+            }
+            else if (appState.getActiveShapeType().equals(ShapeType.ELLIPSE)){
+                cmd = new ShapeCommand(start, end, appState, stateHandler);
+                try{cmd.run();} catch (IOException x) { }
+            }
+            else if (appState.getActiveShapeType().equals(ShapeType.TRIANGLE)){
+                cmd = new ShapeCommand(start, end, appState, stateHandler);
+                try{cmd.run();} catch (IOException x) { }
+            }
+        }
+        else if (appState.getActiveMouseMode().equals(MouseMode.SELECT)){
+            cmd = new SelectCommand(start, end, appState, stateHandler);
+            try{cmd.run();} catch (IOException x) { }
+        }
+        else if (appState.getActiveMouseMode().equals(MouseMode.MOVE)){
+            cmd = new MoveCommand(start, end, appState, stateHandler);
+            try{cmd.run();} catch (IOException x) { }
+        }
+
     }
 
     @Override
@@ -67,6 +90,11 @@ public class IMouseListener implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
+    }
+
+    @Override
+    public void update(ApplicationState AppState) {
+        this.appState = appState;
     }
 
 }

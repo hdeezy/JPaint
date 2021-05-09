@@ -1,18 +1,36 @@
 package controller;
 
-import commands.ICommand;
-import model.interfaces.IApplicationState;
+import model.*;
+import model.Shape;
+import model.interfaces.AppStateHandler;
+import model.interfaces.IStateObserver;
+import model.persistence.ApplicationState;
+import mouse.IMouseListener;
 import view.EventName;
-import view.interfaces.IEventCallback;
 import view.interfaces.IUiModule;
+import view.interfaces.PaintCanvasBase;
 
-public class JPaintController implements IJPaintController {
-    private final IUiModule uiModule;
-    private final IApplicationState applicationState;
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
 
-    public JPaintController(IUiModule uiModule, IApplicationState applicationState) {
+public class JPaintController implements IJPaintController, IStateObserver {
+    private IUiModule uiModule;
+    private ApplicationState applicationState;
+    private IMouseListener mouse;
+    private AppStateHandler stateHandler;
+    private PaintCanvasBase paintCanvas;
+
+    public JPaintController(IUiModule uiModule, PaintCanvasBase paintCanvas) {
         this.uiModule = uiModule;
-        this.applicationState = applicationState;
+        this.applicationState = new ApplicationState(uiModule, paintCanvas);
+        AppStateHandler stateHandler = new AppStateHandler(applicationState);
+        this.mouse = new IMouseListener(applicationState, stateHandler);
+        this.paintCanvas = paintCanvas;
+        this.paintCanvas.addMouseListener(mouse);
+
+        stateHandler.registerObserver(this);
+        stateHandler.registerObserver(mouse);
     }
 
     @Override
@@ -29,5 +47,15 @@ public class JPaintController implements IJPaintController {
         uiModule.addEvent(EventName.UNDO, () -> applicationState.UNDO());
         uiModule.addEvent(EventName.REDO, () -> applicationState.REDO());
 
+    }
+
+
+    public ApplicationState getApplicationState(){return this.applicationState;}
+    public IMouseListener getMouse(){return this.mouse;}
+    public PaintCanvasBase getPaintCanvas(){return this.paintCanvas;}
+
+    @Override
+    public void update(ApplicationState AppState) {
+        this.applicationState = AppState;
     }
 }

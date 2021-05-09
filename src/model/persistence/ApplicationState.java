@@ -1,31 +1,48 @@
 package model.persistence;
 
-import commands.*;
-import model.ShapeColor;
-import model.ShapeShadingType;
-import model.ShapeType;
-import model.MouseMode;
+import model.*;
+import model.Shape;
 import model.dialogs.DialogProvider;
-import model.interfaces.IApplicationState;
-import model.interfaces.IDialogProvider;
+import model.interfaces.*;
 import view.interfaces.IUiModule;
+import view.interfaces.PaintCanvasBase;
 
+import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ApplicationState implements IApplicationState {
     private final IUiModule uiModule;
     private final IDialogProvider dialogProvider;
-
     private ShapeType activeShapeType;
     private ShapeColor activePrimaryColor;
     private ShapeColor activeSecondaryColor;
     private ShapeShadingType activeShapeShadingType;
     private MouseMode activeMouseMode;
 
-    public ApplicationState(IUiModule uiModule) {
+    private PaintCanvasBase paintCanvas;
+
+    private ArrayList<Shape> shapes;
+    private ArrayList<Shape> selected;
+
+
+
+
+    public ApplicationState(IUiModule uiModule, PaintCanvasBase paintCanvas) {
+        this.paintCanvas = paintCanvas;
         this.uiModule = uiModule;
         this.dialogProvider = new DialogProvider(this);
         setDefaults();
+        this.shapes = new ArrayList<>();
+        this.selected = new ArrayList<>();
+    }
+
+    public void addShape(Shape shape){
+        shapes.add(shape);
+    }
+
+    public void removeShape(Shape shape){
+        shapes.remove(shape);
     }
 
     @Override
@@ -88,6 +105,48 @@ public class ApplicationState implements IApplicationState {
     @Override
     public MouseMode getActiveMouseMode() {
         return activeMouseMode;
+    }
+
+    public ArrayList<Shape> getSelected(){
+        return selected;
+    }
+
+    public void setSelected(ArrayList<Shape> s){
+        this.selected = s;
+    }
+
+    public ArrayList<Shape> getShapes(){
+        return shapes;
+    }
+
+    public void setShapes(ArrayList<Shape> s){
+        this.shapes = s;
+    }
+
+    public void drawShapes() {
+        Graphics2D graphics2d = paintCanvas.getGraphics2D();
+
+        graphics2d.setColor(Color.WHITE);
+        graphics2d.fillRect(0, 0, paintCanvas.getWidth(), paintCanvas.getHeight());
+
+        IDrawStrategy drawStrategy;
+
+        for (Shape shape : shapes) {
+            switch(shape.getShade()){
+                case FILLED_IN:
+                    drawStrategy = new FilledStrategy();
+                    break;
+                case OUTLINE:
+                    drawStrategy = new OutlineStrategy();
+                    break;
+                case OUTLINE_AND_FILLED_IN:
+                    drawStrategy = new FilledOutlineStrategy();
+                    break;
+                default:
+                    continue;
+            }
+            drawStrategy.draw(shape, paintCanvas);
+        }
     }
 
     private void setDefaults() {

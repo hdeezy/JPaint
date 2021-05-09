@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class SelectCommand implements ICommand, IUndoable {
+public class SelectClickCommand implements ICommand, IUndoable {
 
     private PaintCanvasBase paintCanvas;
     private ApplicationState applicationState;
@@ -17,59 +17,57 @@ public class SelectCommand implements ICommand, IUndoable {
     private ArrayList<Shape> oldSelection;
     private ArrayList<Shape> selected;
 
-    private Point start, end;
+    private Point click;
+
 
     private int dx, dy;
 
     Stack<IUndoable> steps;
 
-    public SelectCommand(Point start, Point end, ApplicationState appState, AppStateHandler stateHandler) {
+    public SelectClickCommand(Point click, ApplicationState appState, AppStateHandler stateHandler) {
         this.paintCanvas = paintCanvas;
-        this.start = start;
-        this.end = end;
+        this.click = click;
         this.applicationState = appState;
         this.stateHandler = stateHandler;
         this.shapes = applicationState.getShapes();
         this.selected = new ArrayList<Shape>();
-    }
 
+    }
+    public Rectangle toRectangle(Point topLeft, Point bottomRight){
+        return new Rectangle(topLeft.x, topLeft.y, bottomRight.x-topLeft.x, topLeft.y - bottomRight.y);
+    }
     @Override
     public void run() {
         oldSelection = applicationState.getSelected();
 
-        System.out.println("Selection over: x1:"+start.x+", y1:"+start.y+", x2:"+end.x+", y2:"+end.y);
-
-        Point topLeft = new Point();
-        Point bottomLeft = new Point();
-        Point topRight = new Point();
-        Point bottomRight = new Point();
+        System.out.println("Selection at: x:"+click.x+", y1:"+click.y);
 
         for(Shape s : shapes){
-            topLeft = s.getTopLeft();
-            bottomRight = s.getBottomRight();
-            bottomLeft.x = topLeft.x;
-            bottomLeft.y = bottomRight.y;
-            topRight.x = bottomRight.x;
-            topRight.y = topLeft.y;
+            Point shapeTopLeft = s.getTopLeft();
+            Point shapeBottomRight = s.getBottomRight();
 
-            if ( isIn(topLeft) || isIn(topRight) || isIn(bottomLeft) || isIn(bottomRight)){
+            boolean inside = false;
+
+            for (int i = shapeTopLeft.x-1; i <= shapeBottomRight.x+1; i++){
+                for (int j = shapeBottomRight.y-1; j <= shapeTopLeft.y+1; j++){
+                    if( click.x == i && click.y == j ) inside = true;
+                }
+            }
+            if (inside){
                 selected.add(s);
-                System.out.println("Shape selected: x1:"+topLeft.x+", y1:"+topLeft.y+", x2:"+bottomRight.x+", y2:"+bottomRight.y);
+                System.out.println("Shape selected at x:"+click.x+", y:"+click.y);
             }
         }
+
+
+
         applicationState.setSelected(selected);
         applicationState.drawShapes();
         stateHandler.notifyObservers(applicationState);
         CommandHistory.add(this);
     }
 
-    // checks if point x is within bounding box where start = topLeft and end = bottomRight
-    public boolean isIn(Point p){
-        if(p.x >= start.x && p.x <= end.x && p.y >= end.y && p.y <= start.y ) return true;
-        else if(p.x <= start.x && p.x <= end.x && p.y <= end.y && p.y >= start.y ) return true;
 
-        else return false;
-    }
 
     @Override
     public void undo() {
