@@ -29,7 +29,7 @@ public class Main {
 
 
 
-/*
+
 
         // Filled in rectangle
         Graphics2D graphics2d = paintCanvas.getGraphics2D();
@@ -47,7 +47,7 @@ public class Main {
         graphics2d.setColor(Color.BLACK);
         graphics2d.drawRect(7, 8, 210, 410);
 
- */
+
 
     }
 }

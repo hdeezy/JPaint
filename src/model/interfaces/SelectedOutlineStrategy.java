@@ -42,8 +42,8 @@ public class SelectedOutlineStrategy implements IDrawStrategy {
 
             //selection shape
             graphics2d.setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 1, new float[]{9}, 0));
-            graphics2d.drawRect(topLeft.x-5, topLeft.y-abs(bottomRight.y-topLeft.y)+5,bottomRight.x-topLeft.x+10, abs(bottomRight.y-topLeft.y)+10);
-
+            graphics2d.setColor(Color.BLACK);
+            graphics2d.drawRect(topLeft.x-5, topLeft.y-abs(bottomRight.y-topLeft.y)-5,bottomRight.x-topLeft.x+10, abs(bottomRight.y-topLeft.y)+10);
 
         }
         else if (shapeType.equals(ShapeType.ELLIPSE)){
@@ -54,7 +54,7 @@ public class SelectedOutlineStrategy implements IDrawStrategy {
 
             //selection shape
             graphics2d.setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 1, new float[]{9}, 0));
-            graphics2d.drawOval(topLeft.x-5, topLeft.y-abs(bottomRight.y-topLeft.y)+5,bottomRight.x-topLeft.x+10, abs(bottomRight.y-topLeft.y)+10);
+            graphics2d.drawOval(topLeft.x-5, topLeft.y-abs(bottomRight.y-topLeft.y)-5,bottomRight.x-topLeft.x+10, abs(bottomRight.y-topLeft.y)+10);
 
         }
         else if (shapeType.equals(ShapeType.TRIANGLE)) {
@@ -66,9 +66,10 @@ public class SelectedOutlineStrategy implements IDrawStrategy {
             graphics2d.drawPolygon(x, y, 3);
 
             //selection shape
-            int[] x2 = {topLeft.x-5, bottomRight.x-5, topLeft.x-5};
-            int[] y2 = {topLeft.y+5, bottomRight.y+5, bottomRight.y+5};
+            int[] x2 = {topLeft.x-5, topLeft.x-5, bottomRight.x+10};
+            int[] y2 = {topLeft.y+10, bottomRight.y-5, bottomRight.y-5};
             graphics2d.setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 1, new float[]{9}, 0));
+            graphics2d.setColor(Color.BLACK);
             graphics2d.drawPolygon(x2, y2, 3);
 
         }

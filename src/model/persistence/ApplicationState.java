@@ -162,8 +162,9 @@ public class ApplicationState implements IApplicationState {
                     default:
                         continue;
                 }
-                drawStrategy.draw(shape, paintCanvas);
             }
+            drawStrategy.draw(shape, paintCanvas);
+
         }
     }
 
