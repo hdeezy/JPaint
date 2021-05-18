@@ -133,21 +133,37 @@ public class ApplicationState implements IApplicationState {
 
         boolean isSelected;
         for (Shape shape : shapes) {
-            isSelected = selected.contains(shape);
-            switch(shape.getShade()){
-                case FILLED_IN:
-                    drawStrategy = new FilledStrategy();
-                    break;
-                case OUTLINE:
-                    drawStrategy = new OutlineStrategy();
-                    break;
-                case OUTLINE_AND_FILLED_IN:
-                    drawStrategy = new FilledOutlineStrategy();
-                    break;
-                default:
-                    continue;
+            if(selected.contains(shape)){
+                switch (shape.getShade()) {
+                    case FILLED_IN:
+                        drawStrategy = new SelectedFilledStrategy();
+                        break;
+                    case OUTLINE:
+                        drawStrategy = new SelectedOutlineStrategy();
+                        break;
+                    case OUTLINE_AND_FILLED_IN:
+                        drawStrategy = new SelectedFilledOutlineStrategy();
+                        break;
+                    default:
+                        continue;
+                }
             }
-            drawStrategy.draw(shape, paintCanvas);
+            else {
+                switch (shape.getShade()) {
+                    case FILLED_IN:
+                        drawStrategy = new FilledStrategy();
+                        break;
+                    case OUTLINE:
+                        drawStrategy = new OutlineStrategy();
+                        break;
+                    case OUTLINE_AND_FILLED_IN:
+                        drawStrategy = new FilledOutlineStrategy();
+                        break;
+                    default:
+                        continue;
+                }
+                drawStrategy.draw(shape, paintCanvas);
+            }
         }
     }
 
