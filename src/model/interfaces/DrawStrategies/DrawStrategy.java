@@ -1,6 +1,7 @@
-package model.interfaces;
+package model.interfaces.DrawStrategies;
 
 import model.Shape;
+import model.interfaces.IDrawStrategy;
 import view.interfaces.PaintCanvasBase;
 
 import java.awt.*;

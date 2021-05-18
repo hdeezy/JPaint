@@ -1,6 +1,9 @@
-package model.interfaces;
+package model.interfaces.Commands;
 
 import model.Shape;
+import model.persistence.AppStateHandler;
+import model.interfaces.ICommand;
+import model.interfaces.IUndoable;
 import model.persistence.ApplicationState;
 import view.interfaces.PaintCanvasBase;
 

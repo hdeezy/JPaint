@@ -1,18 +1,12 @@
 package controller;
 
-import model.*;
-import model.Shape;
-import model.interfaces.AppStateHandler;
-import model.interfaces.IStateObserver;
+import model.interfaces.*;
+import model.persistence.AppStateHandler;
 import model.persistence.ApplicationState;
 import mouse.IMouseListener;
 import view.EventName;
 import view.interfaces.IUiModule;
 import view.interfaces.PaintCanvasBase;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
 
 public class JPaintController implements IJPaintController, IStateObserver {
     private IUiModule uiModule;
@@ -28,9 +22,9 @@ public class JPaintController implements IJPaintController, IStateObserver {
         this.mouse = new IMouseListener(applicationState, stateHandler);
         this.paintCanvas = paintCanvas;
         this.paintCanvas.addMouseListener(mouse);
-
         stateHandler.registerObserver(this);
         stateHandler.registerObserver(mouse);
+        applicationState.setStateHandler(stateHandler);
     }
 
     @Override
@@ -46,6 +40,9 @@ public class JPaintController implements IJPaintController, IStateObserver {
         uiModule.addEvent(EventName.CHOOSE_MOUSE_MODE, () -> applicationState.setActiveStartAndEndPointMode());
         uiModule.addEvent(EventName.UNDO, () -> applicationState.UNDO());
         uiModule.addEvent(EventName.REDO, () -> applicationState.REDO());
+        uiModule.addEvent(EventName.COPY, () -> applicationState.copy());
+        uiModule.addEvent(EventName.PASTE, () -> applicationState.paste());
+        uiModule.addEvent(EventName.DELETE, () -> applicationState.delete());
 
     }
 

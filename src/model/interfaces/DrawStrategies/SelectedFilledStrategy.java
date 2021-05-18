@@ -1,8 +1,9 @@
-package model.interfaces;
+package model.interfaces.DrawStrategies;
 
 import model.Shape;
-import model.ShapeColor;
-import model.ShapeType;
+import model.Enums.ShapeColor;
+import model.Enums.ShapeType;
+import model.interfaces.IDrawStrategy;
 import view.interfaces.PaintCanvasBase;
 
 import java.awt.*;
@@ -10,7 +11,7 @@ import java.util.EnumMap;
 
 import static java.lang.Math.abs;
 
-public class SelectedFilledStrategy implements IDrawStrategy{
+public class SelectedFilledStrategy implements IDrawStrategy {
     @Override
     public void draw(Shape shape, PaintCanvasBase paintCanvas) {
         Point topLeft = shape.getTopLeft();

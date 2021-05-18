@@ -4,9 +4,14 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.awt.Point;
 
-import model.MouseMode;
-import model.ShapeType;
+import model.Enums.MouseMode;
+import model.Enums.ShapeType;
 import model.interfaces.*;
+import model.interfaces.Commands.MoveCommand;
+import model.interfaces.Commands.SelectClickCommand;
+import model.interfaces.Commands.SelectCommand;
+import model.interfaces.Commands.ShapeCommand;
+import model.persistence.AppStateHandler;
 import model.persistence.ApplicationState;
 import view.interfaces.PaintCanvasBase;
 

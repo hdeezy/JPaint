@@ -1,9 +1,14 @@
 package model.persistence;
 
-import model.*;
+import model.Enums.MouseMode;
+import model.Enums.ShapeColor;
+import model.Enums.ShapeShadingType;
+import model.Enums.ShapeType;
 import model.Shape;
 import model.dialogs.DialogProvider;
 import model.interfaces.*;
+import model.interfaces.Commands.*;
+import model.interfaces.DrawStrategies.*;
 import view.interfaces.IUiModule;
 import view.interfaces.PaintCanvasBase;
 
@@ -20,10 +25,14 @@ public class ApplicationState implements IApplicationState {
     private ShapeShadingType activeShapeShadingType;
     private MouseMode activeMouseMode;
 
+    private AppStateHandler stateHandler;
+
+
     private PaintCanvasBase paintCanvas;
 
     private ArrayList<Shape> shapes;
     private ArrayList<Shape> selected;
+    private ArrayList<Shape> clipboard;
 
 
 
@@ -35,14 +44,26 @@ public class ApplicationState implements IApplicationState {
         setDefaults();
         this.shapes = new ArrayList<>();
         this.selected = new ArrayList<>();
+        this.clipboard = new ArrayList<>();
     }
 
-    public void addShape(Shape shape){
-        shapes.add(shape);
+    public void setStateHandler(AppStateHandler stateHandler){
+        this.stateHandler = stateHandler;
     }
 
-    public void removeShape(Shape shape){
-        shapes.remove(shape);
+    public void copy() {
+        ICommand command = new CopyCommand(this, stateHandler);
+        try{command.run();} catch (IOException x) {System.out.println("IOException with copy.");}
+    }
+
+    public void paste() {
+        ICommand command = new PasteCommand(this, stateHandler);
+        try{command.run();} catch (IOException x) {System.out.println("IOException with paste.");}
+    }
+
+    public void delete() {
+        ICommand command = new DeleteCommand(this, stateHandler);
+        try{command.run();} catch (IOException x) {System.out.println("IOException with delete.");}
     }
 
     @Override
@@ -123,6 +144,22 @@ public class ApplicationState implements IApplicationState {
         this.shapes = s;
     }
 
+    public ArrayList<Shape> getClipboard(){
+        return clipboard;
+    }
+
+    public void addShape(Shape shape){
+        shapes.add(shape);
+    }
+
+    public void removeShape(Shape shape){
+        shapes.remove(shape);
+    }
+
+    public void setClipboard(ArrayList<Shape> c){
+        clipboard = c;
+    }
+
     public void drawShapes() {
         Graphics2D graphics2d = paintCanvas.getGraphics2D();
 
@@ -175,4 +212,6 @@ public class ApplicationState implements IApplicationState {
         activeShapeShadingType = ShapeShadingType.FILLED_IN;
         activeMouseMode = MouseMode.DRAW;
     }
+
+
 }

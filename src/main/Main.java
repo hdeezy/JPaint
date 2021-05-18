@@ -2,21 +2,14 @@ package main;
 
 import controller.IJPaintController;
 import controller.JPaintController;
-import model.ShapeColor;
-import model.ShapeType;
-import model.interfaces.AppStateHandler;
-import model.persistence.ApplicationState;
 import view.gui.Gui;
 import view.gui.GuiWindow;
 import view.gui.PaintCanvas;
 import view.interfaces.IGuiWindow;
 import view.interfaces.PaintCanvasBase;
 import view.interfaces.IUiModule;
-import mouse.*;
 
 import java.awt.*;
-import java.util.Collection;
-import java.util.EnumMap;
 
 public class Main {
 
