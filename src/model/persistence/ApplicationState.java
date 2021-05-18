@@ -131,7 +131,9 @@ public class ApplicationState implements IApplicationState {
 
         IDrawStrategy drawStrategy;
 
+        boolean isSelected;
         for (Shape shape : shapes) {
+            isSelected = selected.contains(shape);
             switch(shape.getShade()){
                 case FILLED_IN:
                     drawStrategy = new FilledStrategy();
