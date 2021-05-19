@@ -1,4 +1,4 @@
-package model.interfaces.Commands;
+package model.Commands;
 
 import model.Shape;
 import model.persistence.AppStateHandler;

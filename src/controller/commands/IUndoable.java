@@ -1,4 +1,4 @@
-package commands;
+package controller.commands;
 
 public interface IUndoable {
     void undo();

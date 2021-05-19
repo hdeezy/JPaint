@@ -1,6 +1,6 @@
 package model.dialogs;
 
-import model.Enums.MouseMode;
+import model.MouseMode;
 import model.interfaces.IApplicationState;
 import view.interfaces.IDialogChoice;
 

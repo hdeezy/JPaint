@@ -1,10 +1,8 @@
-package model.interfaces.DrawStrategies;
+package controller.DrawStrategies;
 
 import model.Shape;
 import model.interfaces.IDrawStrategy;
 import view.interfaces.PaintCanvasBase;
-
-import java.awt.*;
 
 public class DrawStrategy {
     private IDrawStrategy strategy;

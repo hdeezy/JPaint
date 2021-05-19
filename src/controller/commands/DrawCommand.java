@@ -1,11 +1,9 @@
-package commands;
+package controller.commands;
 
-import model.persistence.ApplicationState;
-import mouse.*;
+import controller.mouse.*;
 import view.interfaces.PaintCanvasBase;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.Stack;
 
 public class DrawCommand implements ICommand, IUndoable {

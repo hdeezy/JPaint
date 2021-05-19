@@ -1,48 +1,51 @@
-package model.interfaces.Commands;
+package model.Commands;
 
 import model.Shape;
 import model.persistence.AppStateHandler;
 import model.interfaces.ICommand;
-import model.interfaces.IStateObserver;
 import model.interfaces.IUndoable;
 import model.persistence.ApplicationState;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class PasteCommand implements ICommand, IUndoable, IStateObserver {
+public class PasteCommand implements ICommand, IUndoable {
 
     ApplicationState applicationState;
     AppStateHandler stateHandler;
 
     ArrayList<Shape> clipboard;
-    ArrayList<Shape> oldShapes;
-    ArrayList<Shape> newShapes;
+    ArrayList<Shape> shapes;
+    Object oldShapes;
 
 
-    public PasteCommand(ApplicationState appState, AppStateHandler stateHandler) {
-        this.applicationState = appState;
+    int dx = 20;
+    int dy = 20;
+
+    public PasteCommand(AppStateHandler stateHandler) {
         this.stateHandler = stateHandler;
-        this.clipboard = applicationState.getClipboard();
-        this.oldShapes = applicationState.getShapes();
-        this.newShapes = applicationState.getShapes();
+        this.applicationState = stateHandler.getAppState();
     }
 
     @Override
     public void run() throws IOException {
-        for (Shape shape : clipboard){
-            newShapes.add(shape);
-        }
+        this.clipboard = applicationState.getClipboard();
+        this.shapes = applicationState.getShapes();
+        oldShapes = shapes.clone();
 
-        applicationState.setShapes(newShapes);
+        for (Shape shape : clipboard){
+            // create new shape based on shape from clipboard
+            shapes.add(new Shape(shape.move(dx,dy)));
+            System.out.println("Shape pasted.");
+        }
+        applicationState.setShapes(shapes);
         stateHandler.notifyObservers(applicationState);
-        applicationState.drawShapes();
         CommandHistory.add(this);
     }
 
     @Override
     public void undo() {
-        applicationState.setShapes(oldShapes);
+        applicationState.setShapes((ArrayList<Shape>)oldShapes);
         stateHandler.notifyObservers(applicationState);
     }
 
@@ -53,10 +56,5 @@ public class PasteCommand implements ICommand, IUndoable, IStateObserver {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void update(ApplicationState AppState) {
-        applicationState = AppState;
     }
 }

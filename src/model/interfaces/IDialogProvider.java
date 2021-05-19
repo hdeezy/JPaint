@@ -1,9 +1,9 @@
 package model.interfaces;
 
-import model.Enums.ShapeColor;
-import model.Enums.ShapeShadingType;
-import model.Enums.ShapeType;
-import model.Enums.MouseMode;
+import model.ShapeColor;
+import model.ShapeShadingType;
+import model.ShapeType;
+import model.MouseMode;
 import view.interfaces.IDialogChoice;
 
 public interface IDialogProvider {

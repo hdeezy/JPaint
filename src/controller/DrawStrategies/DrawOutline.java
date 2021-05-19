@@ -1,8 +1,8 @@
-package model.interfaces.DrawStrategies;
+package controller.DrawStrategies;
 
 import model.Shape;
-import model.Enums.ShapeColor;
-import model.Enums.ShapeType;
+import model.ShapeColor;
+import model.ShapeType;
 
 import java.awt.*;
 import java.util.EnumMap;

@@ -1,4 +1,4 @@
-package model.Enums;
+package model;
 
 import java.awt.*;
 

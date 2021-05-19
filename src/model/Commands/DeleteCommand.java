@@ -1,4 +1,4 @@
-package model.interfaces.Commands;
+package model.Commands;
 
 import model.Shape;
 import model.persistence.AppStateHandler;
@@ -9,49 +9,48 @@ import model.persistence.ApplicationState;
 
 import java.util.ArrayList;
 
-public class DeleteCommand implements ICommand, IUndoable, IStateObserver {
+public class DeleteCommand implements ICommand, IUndoable {
     ApplicationState applicationState;
     AppStateHandler stateHandler;
 
     ArrayList<Shape> selected;
-    ArrayList<Shape> oldShapes;
     ArrayList<Shape> shapes;
 
-    public DeleteCommand(ApplicationState appState, AppStateHandler stateHandler) {
-        this.applicationState = appState;
+    public DeleteCommand(AppStateHandler stateHandler) {
         this.stateHandler = stateHandler;
-        this.oldShapes = applicationState.getShapes();
+        this.applicationState = stateHandler.getAppState();
+        this.shapes = applicationState.getShapes();
         this.selected = applicationState.getSelected();
-
     }
 
     @Override
     public void run(){
-        shapes = oldShapes;
+
         for(Shape shape : selected){
             shapes.remove(shape);
             System.out.println("Deleted shape.");
         }
         applicationState.setShapes(shapes);
+        applicationState.setSelected(new ArrayList<Shape>());
         stateHandler.notifyObservers(applicationState);
-        applicationState.drawShapes();
         CommandHistory.add(this);
     }
 
 
     @Override
     public void undo() {
-        applicationState.setShapes(oldShapes);
+        for (Shape shape : selected){
+            shapes.add(shape);
+            System.out.println("Undo delete shape.");
+        }
+        applicationState.setSelected(selected);
+        applicationState.setShapes(shapes);
+        applicationState.drawShapes();
         stateHandler.notifyObservers(applicationState);
     }
 
     @Override
     public void redo() {
         this.run();
-    }
-
-    @Override
-    public void update(ApplicationState AppState) {
-        applicationState = AppState;
     }
 }

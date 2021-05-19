@@ -3,7 +3,7 @@ package controller;
 import model.interfaces.*;
 import model.persistence.AppStateHandler;
 import model.persistence.ApplicationState;
-import mouse.IMouseListener;
+import controller.mouse.IMouseListener;
 import view.EventName;
 import view.interfaces.IUiModule;
 import view.interfaces.PaintCanvasBase;

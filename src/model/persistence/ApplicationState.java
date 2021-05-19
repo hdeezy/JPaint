@@ -1,14 +1,11 @@
 package model.persistence;
 
-import model.Enums.MouseMode;
-import model.Enums.ShapeColor;
-import model.Enums.ShapeShadingType;
-import model.Enums.ShapeType;
+import model.*;
 import model.Shape;
 import model.dialogs.DialogProvider;
 import model.interfaces.*;
-import model.interfaces.Commands.*;
-import model.interfaces.DrawStrategies.*;
+import model.Commands.*;
+import controller.DrawStrategies.*;
 import view.interfaces.IUiModule;
 import view.interfaces.PaintCanvasBase;
 
@@ -34,9 +31,6 @@ public class ApplicationState implements IApplicationState {
     private ArrayList<Shape> selected;
     private ArrayList<Shape> clipboard;
 
-
-
-
     public ApplicationState(IUiModule uiModule, PaintCanvasBase paintCanvas) {
         this.paintCanvas = paintCanvas;
         this.uiModule = uiModule;
@@ -52,18 +46,21 @@ public class ApplicationState implements IApplicationState {
     }
 
     public void copy() {
-        ICommand command = new CopyCommand(this, stateHandler);
+        ICommand command = new CopyCommand(stateHandler);
         try{command.run();} catch (IOException x) {System.out.println("IOException with copy.");}
+        this.drawShapes();
     }
 
     public void paste() {
-        ICommand command = new PasteCommand(this, stateHandler);
+        ICommand command = new PasteCommand(stateHandler);
         try{command.run();} catch (IOException x) {System.out.println("IOException with paste.");}
+        this.drawShapes();
     }
 
     public void delete() {
-        ICommand command = new DeleteCommand(this, stateHandler);
+        ICommand command = new DeleteCommand(stateHandler);
         try{command.run();} catch (IOException x) {System.out.println("IOException with delete.");}
+        this.drawShapes();
     }
 
     @Override
@@ -134,6 +131,7 @@ public class ApplicationState implements IApplicationState {
 
     public void setSelected(ArrayList<Shape> s){
         this.selected = s;
+        this.drawShapes();
     }
 
     public ArrayList<Shape> getShapes(){
@@ -142,6 +140,7 @@ public class ApplicationState implements IApplicationState {
 
     public void setShapes(ArrayList<Shape> s){
         this.shapes = s;
+        this.drawShapes();
     }
 
     public ArrayList<Shape> getClipboard(){
@@ -150,10 +149,13 @@ public class ApplicationState implements IApplicationState {
 
     public void addShape(Shape shape){
         shapes.add(shape);
+        this.drawShapes();
+
     }
 
     public void removeShape(Shape shape){
         shapes.remove(shape);
+        this.drawShapes();
     }
 
     public void setClipboard(ArrayList<Shape> c){
