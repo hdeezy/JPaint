@@ -35,7 +35,8 @@ public class PasteCommand implements ICommand, IUndoable {
 
         for (Shape shape : clipboard){
             // create new shape based on shape from clipboard
-            shapes.add(new Shape(shape.move(dx,dy)));
+            Shape.ShapeBuilder builder = new Shape.ShapeBuilder();
+            shapes.add(builder.clone(shape.move(dx,dy)));
             System.out.println("Shape pasted.");
         }
         applicationState.setShapes(shapes);
