@@ -24,10 +24,14 @@ public class ApplicationState implements IApplicationState {
 
     private AppStateHandler stateHandler;
 
-
     private PaintCanvasBase paintCanvas;
 
-    private ArrayList<Shape> shapes;
+    private ShapeListBuilder shapeListBuilder;
+
+    String nameCounter;
+
+    private ArrayList<IShapeItem> shapes;
+
     private ArrayList<Shape> selected;
     private ArrayList<Shape> clipboard;
 
@@ -36,7 +40,11 @@ public class ApplicationState implements IApplicationState {
         this.uiModule = uiModule;
         this.dialogProvider = new DialogProvider(this);
         setDefaults();
-        this.shapes = new ArrayList<>();
+
+
+        //this.shapes = new ArrayList<>();
+
+
         this.selected = new ArrayList<>();
         this.clipboard = new ArrayList<>();
     }
@@ -171,6 +179,10 @@ public class ApplicationState implements IApplicationState {
         IDrawStrategy drawStrategy;
 
         boolean isSelected;
+        Shape shape;
+        while ( shapes.hasNext() ){
+            shape = shape.getNext();
+        }
         for (Shape shape : shapes) {
             if(selected.contains(shape)){
                 switch (shape.getShade()) {
