@@ -9,8 +9,10 @@ import controller.DrawStrategies.*;
 import view.interfaces.IUiModule;
 import view.interfaces.PaintCanvasBase;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static model.ShapeShadingType.*;
@@ -35,6 +37,7 @@ public class ApplicationState implements IApplicationState {
     private ArrayList<IShapeItem> selected;
     private ArrayList<IShapeItem> clipboard;
 
+
     public ApplicationState(IUiModule uiModule, PaintCanvasBase paintCanvas) {
         this.paintCanvas = paintCanvas;
         this.uiModule = uiModule;
@@ -49,6 +52,18 @@ public class ApplicationState implements IApplicationState {
 
     public void setStateHandler(AppStateHandler stateHandler){
         this.stateHandler = stateHandler;
+    }
+
+    public void group(){
+        ICommand command = new GroupCommand(stateHandler);
+        try{command.run();} catch (IOException x) {System.out.println("IOException with group.");}
+        this.drawShapes();
+    }
+
+    public void ungroup(){
+        ICommand command = new UngroupCommand(stateHandler);
+        try{command.run();} catch (IOException x) {System.out.println("IOException with ungroup.");}
+        this.drawShapes();
     }
 
     public void copy() {

@@ -1,6 +1,7 @@
 package model.Commands;
 
 import model.Shape;
+import model.ShapeBuilder;
 import model.interfaces.IShapeItem;
 import model.persistence.AppStateHandler;
 import model.interfaces.ICommand;
@@ -37,9 +38,11 @@ public class PasteCommand implements ICommand, IUndoable {
 
         for (IShapeItem shape : clipboard){
             // create new shape based on shape from clipboard
-            Shape.ShapeBuilder builder = new Shape.ShapeBuilder();
+            ShapeBuilder builder = new ShapeBuilder();
             shape.move(dx,dy);
-            shapes.add(builder.clone(shape));
+            Object newShape = builder.clone(shape);
+            shapes.add((IShapeItem) newShape);
+            shape.move(-dx,-dy);
             System.out.println("Paste done.");
         }
         applicationState.setShapes(shapes);

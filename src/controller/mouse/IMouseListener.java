@@ -19,12 +19,10 @@ import java.io.IOException;
 
 public class IMouseListener implements MouseListener, IStateObserver {
 
-    PaintCanvasBase paintCanvas;
     ApplicationState appState;
     AppStateHandler stateHandler;
 
     public IMouseListener(ApplicationState appState, AppStateHandler stateHandler){
-        this.paintCanvas = paintCanvas;
         this.appState = appState;
         this.stateHandler = stateHandler;
     }

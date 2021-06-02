@@ -63,8 +63,6 @@ public class SelectClickCommand implements ICommand, IUndoable {
             }
         }
 
-
-
         applicationState.setSelected(selected);
         applicationState.drawShapes();
         stateHandler.notifyObservers(applicationState);

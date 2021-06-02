@@ -1,6 +1,5 @@
 package model.Commands;
 
-import model.Shape;
 import model.interfaces.ICommand;
 import model.interfaces.IShapeItem;
 import model.interfaces.IUndoable;
@@ -8,10 +7,9 @@ import model.persistence.AppStateHandler;
 import model.persistence.ApplicationState;
 import model.persistence.ShapeGroup;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-public class GroupCommand implements ICommand, IUndoable {
+public class UngroupCommand implements ICommand, IUndoable {
     ApplicationState applicationState;
     AppStateHandler stateHandler;
 
@@ -20,20 +18,16 @@ public class GroupCommand implements ICommand, IUndoable {
 
     ArrayList<IShapeItem> shapes;
 
-    public GroupCommand(AppStateHandler stateHandler) {
+    public UngroupCommand(AppStateHandler stateHandler) {
         this.stateHandler = stateHandler;
         this.applicationState = stateHandler.getAppState();
         this.shapes = applicationState.getShapes();
         this.oldShapes = shapes;
         ShapeGroup group = new ShapeGroup();
         for(IShapeItem shape : selected){
-            group.addShape(shape);
+            group.removeShape(shape);
         }
         shapes.add(group);
-    }
-
-    public GroupCommand() {
-
     }
 
     @Override

@@ -7,18 +7,42 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class ShapeGroup implements IShapeItem {
-    private ArrayList<IShapeItem> shapes;
+    private ArrayList<IShapeItem> shapes =  new ArrayList<>();
 
-    private Point topLeft = new Point(); // bounding box borders
-    private Point bottomRight = new Point();
+    private Point topLeft;
+    private Point bottomRight;
 
-    public void Group(){
-        shapes = new ArrayList<>();
+    public ShapeGroup(){
+        topLeft = new Point();
+        topLeft.x = 0;
+        topLeft.y = 0;
+        bottomRight = new Point();
+        bottomRight.x = 0;
+        bottomRight.y = 0;
     }
 
     public void addShape(IShapeItem shape){
         shapes.add(shape);
     }
+
+    public void addShapes(ArrayList<IShapeItem> shapelist){
+        for (IShapeItem s : shapelist){
+            shapes.add(s);
+        }
+    }
+
+    public void removeShape(IShapeItem shape){
+        shapes.remove(shape);
+    }
+
+    public void removeShapes(ArrayList<IShapeItem> shapelist){
+        for (IShapeItem s : shapelist){
+            shapes.remove(s);
+        }
+    }
+
+    public ArrayList<IShapeItem> getShapes(){ return shapes; }
+
 
     @Override
     public void move(int dx, int dy){
