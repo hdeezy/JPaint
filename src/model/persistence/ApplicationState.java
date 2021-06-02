@@ -216,7 +216,10 @@ public class ApplicationState implements IApplicationState {
             }
             // if there is a group, traverse it dispatching recursive calls to drawShapeItem for each group member
             else if (shape.getClass().equals(ShapeGroup.class)) {
-                drawShapeItem(shape, graphics2d);
+                ArrayList<IShapeItem> group = ((ShapeGroup) shape).getShapes();
+                for(IShapeItem item : group){
+                    drawShapeItem(item, graphics2d);
+                }
             }
             // dealing with the composition externally gives a bad code smell, but it is needed given the implementation of
             // drawing the shapes

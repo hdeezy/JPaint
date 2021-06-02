@@ -24,10 +24,12 @@ public class GroupCommand implements ICommand, IUndoable {
         this.stateHandler = stateHandler;
         this.applicationState = stateHandler.getAppState();
         this.shapes = applicationState.getShapes();
+        this.selected = applicationState.getSelected();
         this.oldShapes = shapes;
         ShapeGroup group = new ShapeGroup();
         for(IShapeItem shape : selected){
             group.addShape(shape);
+            shapes.remove(shape);
         }
         shapes.add(group);
     }
