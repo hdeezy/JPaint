@@ -16,33 +16,36 @@ public class GroupCommand implements ICommand, IUndoable {
     AppStateHandler stateHandler;
 
     ArrayList<IShapeItem> selected;
+    ArrayList<IShapeItem> oldShapes;
+
     ArrayList<IShapeItem> shapes;
 
     public GroupCommand(AppStateHandler stateHandler) {
         this.stateHandler = stateHandler;
         this.applicationState = stateHandler.getAppState();
         this.shapes = applicationState.getShapes();
+        this.oldShapes = shapes;
         ShapeGroup group = new ShapeGroup();
         for(IShapeItem shape : selected){
             group.addShape(shape);
         }
+        shapes.add(group);
     }
 
-
     @Override
-    public void run() throws IOException {
-        for(IShapeItem shape : shapes){
-
-        }
+    public void run() {
+        applicationState.setShapes(shapes);
+        stateHandler.notifyObservers(applicationState);
     }
 
     @Override
     public void undo() {
-
+        applicationState.setShapes(oldShapes);
+        stateHandler.notifyObservers(applicationState);
     }
 
     @Override
     public void redo() {
-
+        this.run();
     }
 }

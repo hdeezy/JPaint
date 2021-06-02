@@ -1,10 +1,12 @@
 package model.Commands;
 
 import model.Shape;
+import model.interfaces.IShapeItem;
 import model.persistence.AppStateHandler;
 import model.interfaces.ICommand;
 import model.interfaces.IUndoable;
 import model.persistence.ApplicationState;
+import model.persistence.ShapeGroup;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,8 +16,8 @@ public class PasteCommand implements ICommand, IUndoable {
     ApplicationState applicationState;
     AppStateHandler stateHandler;
 
-    ArrayList<Shape> clipboard;
-    ArrayList<Shape> shapes;
+    ArrayList<IShapeItem> clipboard;
+    ArrayList<IShapeItem> shapes;
     Object oldShapes;
 
 
@@ -33,20 +35,22 @@ public class PasteCommand implements ICommand, IUndoable {
         this.shapes = applicationState.getShapes();
         oldShapes = shapes.clone();
 
-        for (Shape shape : clipboard){
+        for (IShapeItem shape : clipboard){
             // create new shape based on shape from clipboard
             Shape.ShapeBuilder builder = new Shape.ShapeBuilder();
-            shapes.add(builder.clone(shape.move(dx,dy)));
-            System.out.println("Shape pasted.");
+            shape.move(dx,dy);
+            shapes.add(builder.clone(shape));
+            System.out.println("Paste done.");
         }
         applicationState.setShapes(shapes);
         stateHandler.notifyObservers(applicationState);
         CommandHistory.add(this);
     }
 
+
     @Override
     public void undo() {
-        applicationState.setShapes((ArrayList<Shape>)oldShapes);
+        applicationState.setShapes((ArrayList<IShapeItem>)oldShapes);
         stateHandler.notifyObservers(applicationState);
     }
 

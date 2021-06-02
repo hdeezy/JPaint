@@ -1,6 +1,7 @@
 package model.Commands;
 
 import model.Shape;
+import model.interfaces.IShapeItem;
 import model.persistence.AppStateHandler;
 import model.interfaces.ICommand;
 import model.interfaces.IStateObserver;
@@ -13,8 +14,8 @@ public class DeleteCommand implements ICommand, IUndoable {
     ApplicationState applicationState;
     AppStateHandler stateHandler;
 
-    ArrayList<Shape> selected;
-    ArrayList<Shape> shapes;
+    ArrayList<IShapeItem> selected;
+    ArrayList<IShapeItem> shapes;
 
     public DeleteCommand(AppStateHandler stateHandler) {
         this.stateHandler = stateHandler;
@@ -26,12 +27,12 @@ public class DeleteCommand implements ICommand, IUndoable {
     @Override
     public void run(){
 
-        for(Shape shape : selected){
+        for(IShapeItem shape : selected){
             shapes.remove(shape);
             System.out.println("Deleted shape.");
         }
         applicationState.setShapes(shapes);
-        applicationState.setSelected(new ArrayList<Shape>());
+        applicationState.setSelected(new ArrayList<IShapeItem>());
         stateHandler.notifyObservers(applicationState);
         CommandHistory.add(this);
     }
@@ -39,7 +40,7 @@ public class DeleteCommand implements ICommand, IUndoable {
 
     @Override
     public void undo() {
-        for (Shape shape : selected){
+        for (IShapeItem shape : selected){
             shapes.add(shape);
             System.out.println("Undo delete shape.");
         }

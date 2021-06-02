@@ -1,6 +1,7 @@
 package model.Commands;
 
 import model.Shape;
+import model.interfaces.IShapeItem;
 import model.persistence.AppStateHandler;
 import model.interfaces.ICommand;
 import model.interfaces.IUndoable;
@@ -16,9 +17,9 @@ public class SelectClickCommand implements ICommand, IUndoable {
     private PaintCanvasBase paintCanvas;
     private ApplicationState applicationState;
     private AppStateHandler stateHandler;
-    private ArrayList<Shape> shapes;
-    private ArrayList<Shape> oldSelection;
-    private ArrayList<Shape> selected;
+    private ArrayList<IShapeItem> shapes;
+    private ArrayList<IShapeItem> oldSelection;
+    private ArrayList<IShapeItem> selected;
 
     private Point click;
 
@@ -33,7 +34,7 @@ public class SelectClickCommand implements ICommand, IUndoable {
         this.applicationState = appState;
         this.stateHandler = stateHandler;
         this.shapes = applicationState.getShapes();
-        this.selected = new ArrayList<Shape>();
+        this.selected = new ArrayList<IShapeItem>();
 
     }
     public Rectangle toRectangle(Point topLeft, Point bottomRight){
@@ -45,7 +46,7 @@ public class SelectClickCommand implements ICommand, IUndoable {
 
         System.out.println("Selection at: x:"+click.x+", y1:"+click.y);
 
-        for(Shape s : shapes){
+        for(IShapeItem s : shapes){
             Point shapeTopLeft = s.getTopLeft();
             Point shapeBottomRight = s.getBottomRight();
 

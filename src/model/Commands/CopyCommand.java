@@ -1,6 +1,7 @@
 package model.Commands;
 
 import model.Shape;
+import model.interfaces.IShapeItem;
 import model.persistence.AppStateHandler;
 import model.interfaces.ICommand;
 import model.interfaces.IStateObserver;
@@ -14,7 +15,7 @@ public class CopyCommand implements ICommand {
     ApplicationState applicationState;
     AppStateHandler stateHandler;
 
-    ArrayList<Shape> newClipboard;
+    ArrayList<IShapeItem> newClipboard;
 
     public CopyCommand(AppStateHandler stateHandler) {
         this.stateHandler = stateHandler;

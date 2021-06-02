@@ -13,6 +13,8 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static model.ShapeShadingType.*;
+
 public class ApplicationState implements IApplicationState {
     private final IUiModule uiModule;
     private final IDialogProvider dialogProvider;
@@ -26,14 +28,12 @@ public class ApplicationState implements IApplicationState {
 
     private PaintCanvasBase paintCanvas;
 
-    private ShapeListBuilder shapeListBuilder;
-
     String nameCounter;
 
     private ArrayList<IShapeItem> shapes;
 
-    private ArrayList<Shape> selected;
-    private ArrayList<Shape> clipboard;
+    private ArrayList<IShapeItem> selected;
+    private ArrayList<IShapeItem> clipboard;
 
     public ApplicationState(IUiModule uiModule, PaintCanvasBase paintCanvas) {
         this.paintCanvas = paintCanvas;
@@ -42,9 +42,7 @@ public class ApplicationState implements IApplicationState {
         setDefaults();
 
 
-        //this.shapes = new ArrayList<>();
-
-
+        this.shapes = new ArrayList<>();
         this.selected = new ArrayList<>();
         this.clipboard = new ArrayList<>();
     }
@@ -133,97 +131,102 @@ public class ApplicationState implements IApplicationState {
         return activeMouseMode;
     }
 
-    public ArrayList<Shape> getSelected(){
+    public ArrayList<IShapeItem> getSelected(){
         return selected;
     }
 
-    public void setSelected(ArrayList<Shape> s){
+    public void setSelected(ArrayList<IShapeItem> s){
         this.selected = s;
         this.drawShapes();
     }
 
-    public ArrayList<Shape> getShapes(){
+    public ArrayList<IShapeItem> getShapes(){
         return shapes;
     }
 
-    public void setShapes(ArrayList<Shape> s){
+    public void setShapes(ArrayList<IShapeItem> s){
         this.shapes = s;
         this.drawShapes();
     }
 
-    public ArrayList<Shape> getClipboard(){
+    public ArrayList<IShapeItem> getClipboard(){
         return clipboard;
     }
 
-    public void addShape(Shape shape){
+    public void addShape(IShapeItem shape){
         shapes.add(shape);
         this.drawShapes();
 
     }
 
-    public void removeShape(Shape shape){
+    public void removeShape(IShapeItem shape){
         shapes.remove(shape);
         this.drawShapes();
     }
 
-    public void setClipboard(ArrayList<Shape> c){
+    public void setClipboard(ArrayList<IShapeItem> c){
         clipboard = c;
     }
+
+    public void drawShapeItem(IShapeItem shape, Graphics2D graphics2d){
+            IDrawStrategy drawStrategy = null;
+
+            if (shape.getClass().equals(Shape.class)) {
+                if (selected.contains(shape)) {
+                    switch (((Shape) shape).getShade()) {
+                        case FILLED_IN:
+                            drawStrategy = new SelectedFilledStrategy();
+                            break;
+                        case OUTLINE:
+                            drawStrategy = new SelectedOutlineStrategy();
+                            break;
+                        case OUTLINE_AND_FILLED_IN:
+                            drawStrategy = new SelectedFilledOutlineStrategy();
+                            break;
+                    }
+                } else {
+                    switch (((Shape) shape).getShade()) {
+                        case FILLED_IN:
+                            drawStrategy = new FilledStrategy();
+                            break;
+                        case OUTLINE:
+                            drawStrategy = new OutlineStrategy();
+                            break;
+                        case OUTLINE_AND_FILLED_IN:
+                            drawStrategy = new FilledOutlineStrategy();
+                            break;
+                    }
+                }
+                drawStrategy.draw((Shape)shape, paintCanvas);
+            }
+            // if there is a group, traverse it dispatching recursive calls to drawShapeItem for each group member
+            else if (shape.getClass().equals(ShapeGroup.class)) {
+                drawShapeItem(shape, graphics2d);
+            }
+            // dealing with the composition externally gives a bad code smell, but it is needed given the implementation of
+            // drawing the shapes
+    }
+
+
 
     public void drawShapes() {
         Graphics2D graphics2d = paintCanvas.getGraphics2D();
 
+        // blank out canvas before redrawing everything
         graphics2d.setColor(Color.WHITE);
         graphics2d.fillRect(0, 0, paintCanvas.getWidth(), paintCanvas.getHeight());
 
-        IDrawStrategy drawStrategy;
-
-        boolean isSelected;
-        Shape shape;
-        while ( shapes.hasNext() ){
-            shape = shape.getNext();
-        }
-        for (Shape shape : shapes) {
-            if(selected.contains(shape)){
-                switch (shape.getShade()) {
-                    case FILLED_IN:
-                        drawStrategy = new SelectedFilledStrategy();
-                        break;
-                    case OUTLINE:
-                        drawStrategy = new SelectedOutlineStrategy();
-                        break;
-                    case OUTLINE_AND_FILLED_IN:
-                        drawStrategy = new SelectedFilledOutlineStrategy();
-                        break;
-                    default:
-                        continue;
-                }
+        // dispatch each element to be dealt with appropriately
+        for (IShapeItem shape : shapes) {
+                drawShapeItem(shape, graphics2d);
             }
-            else {
-                switch (shape.getShade()) {
-                    case FILLED_IN:
-                        drawStrategy = new FilledStrategy();
-                        break;
-                    case OUTLINE:
-                        drawStrategy = new OutlineStrategy();
-                        break;
-                    case OUTLINE_AND_FILLED_IN:
-                        drawStrategy = new FilledOutlineStrategy();
-                        break;
-                    default:
-                        continue;
-                }
-            }
-            drawStrategy.draw(shape, paintCanvas);
-
-        }
     }
 
     private void setDefaults() {
         activeShapeType = ShapeType.RECTANGLE;
         activePrimaryColor = ShapeColor.BLUE;
         activeSecondaryColor = ShapeColor.GREEN;
-        activeShapeShadingType = ShapeShadingType.FILLED_IN;
+        activeShapeShadingType = FILLED_IN;
         activeMouseMode = MouseMode.DRAW;
     }
 
