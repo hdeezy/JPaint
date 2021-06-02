@@ -23,18 +23,24 @@ public class UngroupCommand implements ICommand, IUndoable {
     public UngroupCommand(AppStateHandler stateHandler) {
         this.stateHandler = stateHandler;
         this.applicationState = stateHandler.getAppState();
-        this.shapes = applicationState.getShapes();
-        this.selected = applicationState.getSelected();
 
-        this.oldShapes = shapes;
+        this.oldSelected = applicationState.getSelected();
+        this.selected = new ArrayList<>();
 
-        for(IShapeItem shape : selected){
+        this.oldShapes = applicationState.getShapes();
+        this.shapes = new ArrayList<>();
+
+        for(IShapeItem shape : oldShapes){
             if (shape.getClass().equals(ShapeGroup.class)){
                 ArrayList<IShapeItem> group = ((ShapeGroup) shape).getShapes();
                 for(IShapeItem groupitem : group){
                     shapes.add(groupitem);
+                    selected.add(groupitem);
                 }
-                selected.remove(shape);
+            }
+            else {
+                shapes.add(shape);
+                selected.add(shape);
             }
         }
     }

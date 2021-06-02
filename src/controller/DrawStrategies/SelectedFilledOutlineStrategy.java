@@ -3,10 +3,14 @@ package controller.DrawStrategies;
 import model.Shape;
 import model.ShapeColor;
 import model.ShapeType;
+import model.persistence.ShapeGroup;
 import model.interfaces.IDrawStrategy;
+import model.interfaces.IShapeItem;
+import model.persistence.ShapeGroup;
 import view.interfaces.PaintCanvasBase;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.EnumMap;
 
 import static java.lang.Math.abs;
@@ -32,6 +36,7 @@ public class SelectedFilledOutlineStrategy implements IDrawStrategy {
         colorMap.put(ShapeColor.RED, Color.RED);
         colorMap.put(ShapeColor.WHITE, Color.WHITE);
         colorMap.put(ShapeColor.YELLOW, Color.yellow);
+
 
         ShapeType shapeType = shape.getShape();
         if (shapeType.equals(ShapeType.RECTANGLE)){
@@ -75,9 +80,7 @@ public class SelectedFilledOutlineStrategy implements IDrawStrategy {
             int[] y2 = {topLeft.y+10, bottomRight.y-5, bottomRight.y-5};
             graphics2d.setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 1, new float[]{9}, 0));
             graphics2d.setColor(Color.BLACK);
-            graphics2d.drawPolygon(x2, y2, 3);
-
-
+        graphics2d.drawPolygon(x2, y2, 3);
         }
     }
 }

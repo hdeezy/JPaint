@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import static java.lang.Math.abs;
 import static model.ShapeShadingType.*;
 
 public class ApplicationState implements IApplicationState {
@@ -217,6 +218,16 @@ public class ApplicationState implements IApplicationState {
             // if there is a group, traverse it dispatching recursive calls to drawShapeItem for each group member
             else if (shape.getClass().equals(ShapeGroup.class)) {
                 ArrayList<IShapeItem> group = ((ShapeGroup) shape).getShapes();
+                Point topLeft = shape.getTopLeft();
+                Point bottomRight = shape.getBottomRight();
+
+                //selection shape
+                int[] x2 = {topLeft.x-5, topLeft.x-5, bottomRight.x+10};
+                int[] y2 = {topLeft.y+10, bottomRight.y-5, bottomRight.y-5};
+                graphics2d.setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 1, new float[]{9}, 0));
+                graphics2d.setColor(Color.BLACK);
+                graphics2d.drawRect(topLeft.x-5, topLeft.y-abs(bottomRight.y-topLeft.y)-5,bottomRight.x-topLeft.x+10, abs(bottomRight.y-topLeft.y)+10);
+
                 for(IShapeItem item : group){
                     drawShapeItem(item, graphics2d);
                 }

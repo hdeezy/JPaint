@@ -4,6 +4,7 @@ import model.Shape;
 import model.ShapeColor;
 import model.ShapeType;
 import model.interfaces.IDrawStrategy;
+import model.interfaces.IShapeItem;
 import view.interfaces.PaintCanvasBase;
 
 import java.awt.*;
