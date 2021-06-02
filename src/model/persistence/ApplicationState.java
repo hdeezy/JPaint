@@ -9,10 +9,8 @@ import controller.DrawStrategies.*;
 import view.interfaces.IUiModule;
 import view.interfaces.PaintCanvasBase;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static java.lang.Math.abs;

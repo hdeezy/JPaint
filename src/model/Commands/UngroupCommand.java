@@ -5,9 +5,8 @@ import model.interfaces.IShapeItem;
 import model.interfaces.IUndoable;
 import model.persistence.AppStateHandler;
 import model.persistence.ApplicationState;
-import model.persistence.ShapeGroup;
+import model.ShapeGroup;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class UngroupCommand implements ICommand, IUndoable {
@@ -37,6 +36,7 @@ public class UngroupCommand implements ICommand, IUndoable {
                     shapes.add(groupitem);
                     selected.add(groupitem);
                 }
+                System.out.println(group.size()+" elements ungrouped.");
             }
             else {
                 shapes.add(shape);

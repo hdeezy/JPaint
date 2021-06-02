@@ -1,14 +1,12 @@
 package model.Commands;
 
-import model.Shape;
 import model.interfaces.ICommand;
 import model.interfaces.IShapeItem;
 import model.interfaces.IUndoable;
 import model.persistence.AppStateHandler;
 import model.persistence.ApplicationState;
-import model.persistence.ShapeGroup;
+import model.ShapeGroup;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class GroupCommand implements ICommand, IUndoable {
@@ -35,6 +33,7 @@ public class GroupCommand implements ICommand, IUndoable {
         for(IShapeItem shape : oldSelected){
             group.addShape(shape);
         }
+        System.out.println(group.getShapes().size()+" elements grouped.");
         shapes.add(group);
         selected.add(group);
     }

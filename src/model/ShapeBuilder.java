@@ -1,10 +1,8 @@
 package model;
 
 import model.interfaces.IShapeItem;
-import model.persistence.ShapeGroup;
 
 import java.awt.Point;
-import java.util.ArrayList;
 
 public class ShapeBuilder {
     private Point topLeft; // bounding box borders
@@ -22,7 +20,6 @@ public class ShapeBuilder {
     public void setColor2(ShapeColor t){this.color2 = t;}
 
     public IShapeItem clone(IShapeItem shape){
-        ShapeBuilder bld = new ShapeBuilder();
         if (shape.getClass().equals(Shape.class)){
             setTopLeft(shape.getTopLeft());
             setBottomRight(shape.getBottomRight());
@@ -32,10 +29,16 @@ public class ShapeBuilder {
             setShape(((Shape) shape).getShape());
             return (build());
         }
-        else {
-            ShapeGroup group = new ShapeGroup();
-            group.addShapes(group.getShapes());
-            return group;
+        else { // else if ShapeGroup
+            ShapeGroup oldGroup = (ShapeGroup) shape;
+            ShapeGroup newGroup = new ShapeGroup();
+
+            for (IShapeItem s : oldGroup.getShapes()){
+                    ShapeBuilder bld = new ShapeBuilder();
+                    newGroup.addShape(bld.clone(s));
+            }
+            return newGroup;
+
         }
     }
 

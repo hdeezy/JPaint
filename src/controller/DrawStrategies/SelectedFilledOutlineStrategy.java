@@ -3,14 +3,10 @@ package controller.DrawStrategies;
 import model.Shape;
 import model.ShapeColor;
 import model.ShapeType;
-import model.persistence.ShapeGroup;
 import model.interfaces.IDrawStrategy;
-import model.interfaces.IShapeItem;
-import model.persistence.ShapeGroup;
 import view.interfaces.PaintCanvasBase;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.EnumMap;
 
 import static java.lang.Math.abs;

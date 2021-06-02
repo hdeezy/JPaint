@@ -1,13 +1,11 @@
 package model.Commands;
 
-import model.Shape;
 import model.ShapeBuilder;
 import model.interfaces.IShapeItem;
 import model.persistence.AppStateHandler;
 import model.interfaces.ICommand;
 import model.interfaces.IUndoable;
 import model.persistence.ApplicationState;
-import model.persistence.ShapeGroup;
 
 import java.io.IOException;
 import java.util.ArrayList;
