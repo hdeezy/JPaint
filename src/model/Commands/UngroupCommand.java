@@ -44,7 +44,8 @@ public class UngroupCommand implements ICommand, IUndoable {
             }
             else {
                 shapes.add(bld.clone(shape));
-                selected.add(bld.clone(shape));
+                if(oldSelected.contains(shape))
+                    selected.add(bld.clone(shape));
             }
         }
     }

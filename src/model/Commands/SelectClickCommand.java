@@ -52,11 +52,16 @@ public class SelectClickCommand implements ICommand, IUndoable {
 
             boolean inside = false;
 
+            // double loop works while comparing boundaries to the point does not bc offset is different for
+            // different shape drawing methods
             for (int i = shapeTopLeft.x-1; i <= shapeBottomRight.x+1; i++){
                 for (int j = shapeBottomRight.y-1; j <= shapeTopLeft.y+1; j++){
                     if( click.x == i && click.y == j ) inside = true;
                 }
             }
+
+
+
             if (inside){
                 selected.add(s);
                 System.out.println("Shape selected at x:"+click.x+", y:"+click.y);
@@ -82,9 +87,6 @@ public class SelectClickCommand implements ICommand, IUndoable {
     @Override
     public void redo() {
         this.run();
-        //Graphics2D graphics2d = paintCanvas.getGraphics2D();
-        //graphics2d.setColor(Color.GREEN);
-        //graphics2d.fillRect(start.x, start.y, end.x-start.x, end.y-start.y);
     }
 
 }

@@ -33,12 +33,12 @@ public class GroupCommand implements ICommand, IUndoable {
 
         ShapeGroup group = new ShapeGroup();
         for(IShapeItem shape : oldShapes){
-            if(oldSelected.contains(shape)){
+            if(oldSelected.contains(shape))
                 group.addShape(shape);
-            }
             else {
                 shapes.add(shape);
-                selected.add(shape);
+                if(oldSelected.contains(shape))
+                    selected.add(shape);
             }
         }
         System.out.println(group.getShapes().size()+" elements grouped.");
